@@ -2,9 +2,9 @@
 
 namespace Homeful\KwYCCheck;
 
-use Homeful\KwycCheck\Commands\KwYCCheckCommand;
-use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Homeful\KwYCCheck\Commands\KwYCCheckCommand;
+use Spatie\LaravelPackageTools\Package;
 
 class KwYCCheckServiceProvider extends PackageServiceProvider
 {
