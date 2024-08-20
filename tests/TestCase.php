@@ -1,9 +1,9 @@
 <?php
 
-namespace Homeful\KwycCheck\Tests;
+namespace Homeful\KwYCCheck\Tests;
 
-use Homeful\KwycCheck\KwYCCheckServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Homeful\KwYCCheck\KwYCCheckServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra

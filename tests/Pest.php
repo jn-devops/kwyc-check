@@ -1,5 +1,5 @@
 <?php
 
-use Homeful\KwycCheck\Tests\TestCase;
+use Homeful\KwYCCheck\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

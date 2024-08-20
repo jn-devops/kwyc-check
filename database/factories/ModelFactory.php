@@ -1,6 +1,6 @@
 <?php
 
-namespace Homeful\KwycCheck\Database\Factories;
+namespace Homeful\KwYCCheck\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
