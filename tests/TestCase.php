@@ -2,9 +2,9 @@
 
 namespace Homeful\KwycCheck\Tests;
 
+use Homeful\KwycCheck\KwycCheckServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Homeful\KwycCheck\KwycCheckServiceProvider;
 
 class TestCase extends Orchestra
 {
