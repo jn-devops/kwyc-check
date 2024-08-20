@@ -2,7 +2,7 @@
 
 namespace Homeful\KwycCheck\Tests;
 
-use Homeful\KwycCheck\KwycCheckServiceProvider;
+use Homeful\KwycCheck\KwYCCheckServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -20,7 +20,7 @@ class TestCase extends Orchestra
     protected function getPackageProviders($app)
     {
         return [
-            KwycCheckServiceProvider::class,
+            KwYCCheckServiceProvider::class,
         ];
     }
 
