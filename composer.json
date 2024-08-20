@@ -36,13 +36,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Homeful\\KwycCheck\\": "src/",
-            "Homeful\\KwycCheck\\Database\\Factories\\": "database/factories/"
+            "Homeful\\KwYCCheck\\": "src/",
+            "Homeful\\KwYCCheck\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Homeful\\KwycCheck\\Tests\\": "tests/",
+            "Homeful\\KwYCCheck\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -77,7 +77,7 @@
                 "KwYCCheckServiceProvider"
             ],
             "aliases": {
-                "KwycCheck": "Homeful\\KwycCheck\\Facades\\KwycCheck"
+                "KwycCheck": "KwYCCheck"
             }
         }
     },

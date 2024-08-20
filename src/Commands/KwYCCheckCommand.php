@@ -1,10 +1,10 @@
 <?php
 
-namespace Homeful\KwycCheck\Commands;
+namespace Homeful\KwYCCheck\Commands;
 
 use Illuminate\Console\Command;
 
-class KwycCheckCommand extends Command
+class KwYCCheckCommand extends Command
 {
     public $signature = 'kwyc-check';
 

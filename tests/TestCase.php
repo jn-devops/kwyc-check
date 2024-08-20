@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Homeful\\KwycCheck\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Homeful\\KwYCCheck\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

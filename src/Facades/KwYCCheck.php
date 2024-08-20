@@ -1,13 +1,13 @@
 <?php
 
-namespace Homeful\KwycCheck\Facades;
+namespace Homeful\KwYCCheck\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Homeful\KwycCheck\KwYCCheck
+ * @see \Homeful\KwYCCheck\KwYCCheck
  */
-class KwycCheck extends Facade
+class KwYCCheck extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Homeful\KwycCheck;
+namespace Homeful\KwYCCheck;
 
-use Homeful\KwycCheck\Commands\KwycCheckCommand;
+use Homeful\KwycCheck\Commands\KwYCCheckCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -20,6 +20,6 @@ class KwYCCheckServiceProvider extends PackageServiceProvider
             ->hasConfigFile(['kwyc-check'])
             ->hasViews()
             ->hasMigration('create_kwyc_check_table')
-            ->hasCommand(KwycCheckCommand::class);
+            ->hasCommand(KwYCCheckCommand::class);
     }
 }

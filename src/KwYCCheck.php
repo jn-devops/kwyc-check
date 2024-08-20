@@ -1,6 +1,6 @@
 <?php
 
-namespace Homeful\KwycCheck;
+namespace Homeful\KwYCCheck;
 
 use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
