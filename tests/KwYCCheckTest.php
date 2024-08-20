@@ -7,5 +7,5 @@ it('has configs', function () {
 });
 
 it ('has QrCode', function(){
-//    dd((new KwYCCheck)->getQrCode());
-})->skip();
+    expect((new KwYCCheck)->getQrCode())->toBeString();
+});
