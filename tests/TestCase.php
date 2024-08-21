@@ -2,9 +2,11 @@
 
 namespace Homeful\KwYCCheck\Tests;
 
+use Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Homeful\KwYCCheck\KwYCCheckServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Homeful\Contacts\ContactsServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -21,6 +23,8 @@ class TestCase extends Orchestra
     {
         return [
             KwYCCheckServiceProvider::class,
+            ContactsServiceProvider::class,
+            SchemalessAttributesServiceProvider::class
         ];
     }
 
@@ -28,9 +32,11 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_kwyc-check_table.php.stub';
+        config()->set('data.validation_strategy', 'always');
+        config()->set('data.max_transformation_depth', 5);
+        config()->set('data.throw_when_max_transformation_depth_reached', 5);
+
+        $migration = include __DIR__.'/../database/migrations/create_leads_table.php.stub';
         $migration->up();
-        */
     }
 }

@@ -17,8 +17,10 @@ class KwYCCheckServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('kwyc-check')
-            ->hasConfigFile(['kwyc-check'])
+            ->hasConfigFile(['data', 'kwyc-check'])
             ->hasViews()
+            ->hasRoute('api')
+            ->hasMigration('create_leads_table')
         ;
     }
 }

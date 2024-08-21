@@ -11,7 +11,6 @@ use BaconQrCode\Renderer\Color\Rgb;
 use BaconQrCode\Writer;
 
 class KwYCCheck {
-
     /**
      * @param string|null $url
      * @return string
