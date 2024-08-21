@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.1.0 - 2024-08-21
+
+add KYC facade
+
 ## #v1.0.5 - 2024-08-20
 
 did not push
