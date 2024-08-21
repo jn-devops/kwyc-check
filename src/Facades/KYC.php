@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Homeful\KwYCCheck\KwYCCheck
  */
-class KwYCCheck extends Facade
+class KYC extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return \Homeful\KwycCheck\KwYCCheck::class;
+        return \Homeful\KwYCCheck\KwYCCheck::class;
     }
 }

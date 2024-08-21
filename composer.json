@@ -12,7 +12,12 @@
         {
             "name": "Anais Santos",
             "email": "aacsantos@joy-nostalg.com",
-            "role": "Developer"
+            "homepage": "https://github.com/anais-enclavewrx"
+        },
+        {
+            "name": "Lester Hurtado",
+            "email": "devops@joy-nostalg.com",
+            "homepage": "https://github.com/jn-devops"
         }
     ],
     "require": {
@@ -77,7 +82,7 @@
                 "Homeful\\KwYCCheck\\KwYCCheckServiceProvider"
             ],
             "aliases": {
-                "KwYCCheck": "KwYCCheck"
+                "KYC": "Homeful\\KwYCCheck\\Facades\\KYC"
             }
         }
     },
