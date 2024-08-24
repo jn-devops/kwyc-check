@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.3.0 - 2024-08-24
+
+use checkin as source of all attributes
+
 ## #v1.2.1 - 2024-08-22
 
 add defaults in generateCampaignQRCode'
