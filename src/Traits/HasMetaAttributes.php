@@ -6,50 +6,24 @@ use Homeful\KwYCCheck\Models\Lead;
 
 trait HasMetaAttributes
 {
+    const CHECKIN_FIELD = 'checkin';
+
     public function initializeHasMetaAttributes(): void
     {
-        $this->mergeFillable(['email', 'mobile', 'code']);
+        $this->mergeFillable(['checkin']);
     }
 
-    public function setEmailAttribute(string $value): self
+    public function setCheckinAttribute(array $value): self
     {
-        $this->getAttribute('meta')->set(Lead::EMAIL_FIELD, $value);
+        $this->getAttribute('meta')->set(Lead::CHECKIN_FIELD, $value);
 
         return $this;
     }
 
-    public function getEmailAttribute(): ?string
+    public function getCheckinAttribute(): ?array
     {
         $default = null;
 
-        return $this->getAttribute('meta')->get(Lead::EMAIL_FIELD) ?? $default;
-    }
-
-    public function setMobileAttribute(string $value): self
-    {
-        $this->getAttribute('meta')->set(Lead::MOBILE_FIELD, $value);
-
-        return $this;
-    }
-
-    public function getMobileAttribute(): ?string
-    {
-        $default = null;
-
-        return $this->getAttribute('meta')->get(Lead::MOBILE_FIELD) ?? $default;
-    }
-
-    public function setCodeAttribute(string $value): self
-    {
-        $this->getAttribute('meta')->set(Lead::CODE_FIELD, $value);
-
-        return $this;
-    }
-
-    public function getCodeAttribute(): ?string
-    {
-        $default = null;
-
-        return $this->getAttribute('meta')->get(Lead::CODE_FIELD) ?? $default;
+        return $this->getAttribute('meta')->get(Lead::CHECKIN_FIELD) ?? $default;
     }
 }

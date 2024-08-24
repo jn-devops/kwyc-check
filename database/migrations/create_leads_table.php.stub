@@ -11,14 +11,6 @@ return new class extends Migration
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->integer('contact_id')->nullable()->index();
-            $table->string('name');
-            $table->string('address');
-            $table->string('birthdate');
-            $table->string('id_type');
-            $table->string('id_number');
-            $table->text('id_image_url')->nullable();
-            $table->text('selfie_image_url')->nullable();
-            $table->text('id_mark_url')->nullable();
             $table->schemalessAttributes('meta');
             $table->timestamps();
         });
