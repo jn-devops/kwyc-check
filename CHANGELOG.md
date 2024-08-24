@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.2.1 - 2024-08-22
+
+add defaults in generateCampaignQRCode'
+
 ## #v1.1.0 - 2024-08-21
 
 add KYC facade
