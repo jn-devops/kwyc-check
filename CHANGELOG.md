@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.0 - 2024-08-25
+
+add qrcode api end point
+
 ## #v1.3.0 - 2024-08-24
 
 use checkin as source of all attributes
