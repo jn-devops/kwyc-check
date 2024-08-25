@@ -12,16 +12,16 @@ use BaconQrCode\Writer;
 
 class KwYCCheck {
     /**
-     * @param array|null $defaults associative array of default values
+     * @param array|null $query_params associative array of default values
      * @param string|null $url
      * @return string
      * @throws \Exception
      */
-    public function generateCampaignQRCOde(array $defaults = null, string $url = null): string
+    public function generateCampaignQRCOde(array $query_params = null, string $url = null): string
     {
         $url = $url ?? config('kwyc-check.campaign_url');
-        if ($defaults) {
-            $query = http_build_query($defaults);
+        if ($query_params) {
+            $query = http_build_query($query_params);
             $url = $url . '?' . $query;
         }
         $qr_code = $this->getQrCodeSvg($url);

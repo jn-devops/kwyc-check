@@ -32,7 +32,39 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'campaign_url' => env('CAMPAIGN_URL', 'https://kwyc-check.net/campaign-checkin/9ccef822-4209-4e0a-bb40-232da5cafdf1')
 ];
+```
+
+There are api end points.
+- the payload for process-lead is webhook post from kwyc-check via pipedream
+- the payload for attach-media is an array of urls point to images
+- the payload for generate-qr is an array of inputs with default values
+```php
+Route::post('process-lead', ProcessLeadController::class)
+    ->prefix('api')
+    ->middleware('api')
+    ->name('process-lead');
+
+Route::post('attach-media/{lead}', AttachLeadMediaController::class)
+    ->prefix('api')
+    ->middleware('api')
+    ->name('attach-media');
+
+Route::post('generate-qr', GenerateQRCodeController::class)
+    ->prefix('api')
+    ->middleware('api')
+    ->name('generate-qr');
+```
+
+To get the data from lead
+```php
+
+use Homeful\KwYCCheck\Data\LeadData;
+use Homeful\KwYCCheck\Models\Lead;
+
+$lead = Lead::factory()->forContact()->create();
+$data = LeadData::fromModel($lead);
 ```
 
 Optionally, you can publish the views using
@@ -44,8 +76,12 @@ php artisan vendor:publish --tag="kwyc-check-views"
 ## Usage
 
 ```php
-$kwycCheck = new Homeful\KwycCheck();
-echo $kwycCheck->echoPhrase('Hello, Homeful!');
+use Homeful\KwYCCheck\Facades\KYC;
+
+$svg = KYC::generateCampaignQRCOde(query_params: ['code' => 'ABC-123','identifier'=>'DEF-456','choice'=>'GHI-789']);
+
+echo $svg; 
+//qr code points to https://kwyc-check.net/campaign-checkin/9ccef822-4209-4e0a-bb40-232da5cafdf1?code=ABC-111&identifier=DEF-222&choice=GHI-333
 ```
 
 ## Testing

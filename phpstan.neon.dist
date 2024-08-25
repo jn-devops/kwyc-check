@@ -19,3 +19,5 @@ parameters:
         - '#Expected parameter of type Brick\\Money\\Money\|float,Brick\\Money\\AbstractMoney provided#'
         - '#Undefined variable: \$this#'
         - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued#'
+        - '#Static call to instance method Homeful\\#'
+        - "#Non-static method 'generateCampaignQRCOde' should not be called statically#"

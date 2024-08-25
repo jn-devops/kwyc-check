@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @see \Homeful\KwYCCheck\KwYCCheck
+ *
+ * @method string generateCampaignQRCOde(array $query_params = null, string $url = null)
  */
 class KYC extends Facade
 {

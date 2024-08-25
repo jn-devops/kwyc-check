@@ -14,6 +14,9 @@ use Homeful\KwYCCheck\Facades\KYC;
 use Homeful\KwYCCheck\Models\Lead;
 use Homeful\KwYCCheck\Actions\AttachLeadMediaAction;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Homeful\KwYCCheck\KwYCCheck;
+use Zxing\QrReader;
+use SVG\SVG;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -30,8 +33,23 @@ it('has configs', function () {
 
 it('can generate campaign QR code', function(){
     Event::fake();
-    expect(KYC::generateCampaignQRCOde(defaults: ['code' => 'ABC-123','identifier'=>'DEF-456','choice'=>'GHI-789']))->toBeString();
+    $svg = app(KwYCCheck::class)->generateCampaignQRCOde(query_params: ['code' => 'ABC-123','identifier'=>'DEF-456','choice'=>'GHI-789']);
+    expect($svg)->toBeString();
     Event::assertDispatched(CampaignQRCodeGenerated::class);
+    //    $image = SVG::fromString($svg);
+    //    $qrcode = new QrReader(Storage::get('image.svg'), QrReader::SOURCE_TYPE_FILE);
+    //    $text = $qrcode->text();
+    //TODO: test generated qr code text using Zxing\QrReader and SVG\SVG
+});
+
+it('has qr code api end point', function () {
+    $inputs_with_defaults = ['code' => 'ABC-111','identifier'=>'DEF-222','choice'=>'GHI-333'];
+    $booking_server_response = $this->postJson(route('generate-qr'), $inputs_with_defaults);
+    $booking_server_response->assertStatus(200);
+    with($booking_server_response->json(), function (array $json) {
+        expect(Arr::get($json, 'qr_code'))->toBeString();
+        expect(strlen(Arr::get($json, 'qr_code')))->toBeGreaterThan(5000);
+    });
 });
 
 test('lead has attributes', function () {
@@ -120,7 +138,7 @@ test('process lead action', function () {
     Event::assertDispatched(LeadProcessed::class);
 });
 
-test('process-lead end point', function () {
+test('process-lead api end point', function () {
     $email = 'mary.cruz@gmail.com';
     $mobile = '09171234567';
     $checkin_payload  = Lead::factory()->getCheckinPayload(compact('email', 'mobile'));
@@ -163,7 +181,7 @@ test('attach lead media action ', function(array $attribs) {
     }
 })->with('media-attribs');
 
-test('attach lead media has end point ', function(array $attribs) {
+test('attach lead media has api end point ', function(array $attribs) {
     $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
     if ($lead instanceof Lead) {
         $booking_server_response = $this->postJson(route('attach-media', ['lead' => $lead->id]), $attribs);
