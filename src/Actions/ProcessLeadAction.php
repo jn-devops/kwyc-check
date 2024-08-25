@@ -2,6 +2,7 @@
 
 namespace Homeful\KwYCCheck\Actions;
 
+use Homeful\KwYCCheck\Events\LeadProcessed;
 use Illuminate\Support\Facades\Validator;
 use Lorisleiva\Actions\Concerns\AsAction;
 use Homeful\KwYCCheck\Models\Lead;
@@ -12,13 +13,19 @@ class ProcessLeadAction
 
     /**
      * @param array $checkin_payload - result payload from Hyperverge
-     * @return Lead
+     * @return Lead|null
      */
-    public function handle(array $checkin_payload): Lead
+    public function handle(array $checkin_payload): ?Lead
     {
         $validated_filtered_attributes = Validator::validate($checkin_payload, $this->rules());
+        $lead = $this->createLead($validated_filtered_attributes, $checkin_payload);
+        if ($lead instanceof  Lead) {
+            LeadProcessed::dispatch($lead);
 
-        return $this->createLead($validated_filtered_attributes, $checkin_payload);
+            return $lead;
+        }
+
+        return null;
     }
 
     /**
@@ -53,9 +60,9 @@ class ProcessLeadAction
     /**
      * @param array $validated_filtered_attributes
      * @param array $checkin_payload
-     * @return Lead
+     * @return Lead|null
      */
-    protected function createLead(array $validated_filtered_attributes, array $checkin_payload): Lead
+    protected function createLead(array $validated_filtered_attributes, array $checkin_payload): ?Lead
     {
         return app(Lead::class)->create([
             'checkin' => $checkin_payload

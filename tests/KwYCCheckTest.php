@@ -5,12 +5,15 @@ use Illuminate\Foundation\Testing\{RefreshDatabase, WithFaker};
 use Homeful\KwYCCheck\Events\CampaignQRCodeGenerated;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Homeful\KwYCCheck\Actions\ProcessLeadAction;
+use Homeful\KwYCCheck\Events\LeadProcessed;
 use Homeful\Contacts\Data\ContactData;
 use Illuminate\Support\Facades\Event;
 use Homeful\Contacts\Models\Contact;
 use Homeful\KwYCCheck\Data\LeadData;
 use Homeful\KwYCCheck\Facades\KYC;
 use Homeful\KwYCCheck\Models\Lead;
+use Homeful\KwYCCheck\Actions\AttachLeadMediaAction;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -85,6 +88,7 @@ test('lead has data', function () {
 });
 
 test('process lead action', function () {
+    Event::fake(LeadProcessed::class);
     $email = $this->faker()->email();
     $mobile = '09171234567';
     $code = $this->faker()->word();
@@ -113,6 +117,7 @@ test('process lead action', function () {
         expect($lead->selfie_image_url)->toBeUrl();
         expect($lead->id_mark_url)->toBeNull();
     }
+    Event::assertDispatched(LeadProcessed::class);
 });
 
 test('process-lead end point', function () {
@@ -125,3 +130,48 @@ test('process-lead end point', function () {
         $booking_server_response->assertJson(['code' => $lead->code, 'status' => true]);
     });
 });
+
+dataset('media-attribs', function () {
+   return [
+       [
+           fn() => [
+               'idImage' => 'https://jn-img.enclaves.ph/Test/idImage.jpg',
+               'selfieImage' => 'https://jn-img.enclaves.ph/Test/selfieImage.jpg'
+           ]
+       ]
+   ];
+});
+
+test('lead has media ', function(array $attribs) {
+    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
+    if ($lead instanceof Lead) {
+        $lead->update($attribs);
+        $lead->save();
+        expect($lead->idImage)->toBeInstanceOf(Media::class);
+        expect($lead->selfieImage)->toBeInstanceOf(Media::class);
+    }
+})->with('media-attribs');
+
+test('attach lead media action ', function(array $attribs) {
+    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
+    if ($lead instanceof Lead) {
+        $lead = app(AttachLeadMediaAction::class)->run($lead, $attribs);
+        if ($lead instanceof Lead) {
+            expect($lead->idImage)->toBeInstanceOf(Media::class);
+            expect($lead->selfieImage)->toBeInstanceOf(Media::class);
+        }
+    }
+})->with('media-attribs');
+
+test('attach lead media has end point ', function(array $attribs) {
+    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
+    if ($lead instanceof Lead) {
+        $booking_server_response = $this->postJson(route('attach-media', ['lead' => $lead->id]), $attribs);
+        $booking_server_response->assertStatus(200);
+        $lead->refresh();
+        expect($lead->idImage)->toBeInstanceOf(Media::class);
+        expect($lead->selfieImage)->toBeInstanceOf(Media::class);
+        expect($lead->uploads)->toHaveCount(2);
+        //improve test
+    }
+})->with('media-attribs');

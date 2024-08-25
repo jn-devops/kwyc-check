@@ -18,3 +18,4 @@ parameters:
         - '#Call to an undefined static method Whitecube\\Price\\Price::PHP#'
         - '#Expected parameter of type Brick\\Money\\Money\|float,Brick\\Money\\AbstractMoney provided#'
         - '#Undefined variable: \$this#'
+        - '#Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver::nonQueued#'
