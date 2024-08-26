@@ -160,7 +160,7 @@ dataset('media-attribs', function () {
    ];
 });
 
-test('lead has media ', function(array $attribs) {
+test('lead has settable media ', function(array $attribs) {
     $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
     if ($lead instanceof Lead) {
         $lead->update($attribs);
@@ -193,3 +193,13 @@ test('attach lead media has api end point ', function(array $attribs) {
         //improve test
     }
 })->with('media-attribs');
+
+test('lead has auto-populated media attributes', function() {
+    $lead = Lead::factory()->create();
+    if ($lead instanceof Lead) {
+        expect($lead->uploads)->toHaveCount(2);
+        foreach($lead->uploads as $upload) {
+            expect($lead->getAttribute($upload['name']))->toBeInstanceOf(Media::class);
+        }
+    }
+});

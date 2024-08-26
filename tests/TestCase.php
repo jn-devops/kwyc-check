@@ -2,6 +2,7 @@
 
 namespace Homeful\KwYCCheck\Tests;
 
+use Homeful\KwYCCheck\Providers\EventServiceProvider as KyWCCheckEventServiceProvider;
 use Spatie\SchemalessAttributes\SchemalessAttributesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Homeful\KwYCCheck\KwYCCheckServiceProvider;
@@ -24,7 +25,8 @@ class TestCase extends Orchestra
         return [
             KwYCCheckServiceProvider::class,
             ContactsServiceProvider::class,
-            SchemalessAttributesServiceProvider::class
+            SchemalessAttributesServiceProvider::class,
+            KyWCCheckEventServiceProvider::class
         ];
     }
 
