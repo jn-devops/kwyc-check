@@ -19,11 +19,7 @@ class KwYCCheck {
      */
     public function generateCampaignQRCOde(array $query_params = null, string $url = null): string
     {
-        $url = $url ?? config('kwyc-check.campaign_url');
-        if ($query_params) {
-            $query = http_build_query($query_params);
-            $url = $url . '?' . $query;
-        }
+        $url = $this->generateUrl($query_params, $url);
         $qr_code = $this->getQrCodeSvg($url);
         CampaignQRCodeGenerated::dispatch();
 
@@ -48,5 +44,20 @@ class KwYCCheck {
         ))->writeString($url);
 
         return trim(substr($svg, strpos($svg, "\n") + 1));
+    }
+
+    /**
+     * @param string|null $url
+     * @param array|null $query_params
+     * @return \Illuminate\Config\Repository|\Illuminate\Foundation\Application|mixed|string|null
+     */
+    public function generateUrl(?array $query_params, ?string $url): mixed
+    {
+        $url = $url ?? config('kwyc-check.campaign_url');
+        if ($query_params) {
+            $query = http_build_query($query_params);
+            $url = $url . '?' . $query;
+        }
+        return $url;
     }
 }
