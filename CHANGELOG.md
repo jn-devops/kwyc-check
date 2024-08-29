@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.3 - 2024-08-29
+
+add create lead contact
+
 ## #v1.4.2 - 2024-08-29
 
 refactor generateURL
