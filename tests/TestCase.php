@@ -38,6 +38,8 @@ class TestCase extends Orchestra
         config()->set('data.max_transformation_depth', 5);
         config()->set('data.throw_when_max_transformation_depth_reached', 5);
 
+        config()->set('app.key', 'base64:Noaj7xFL4KayvC9tCqQ10p7Ezh4taq5aEDOzNs0Pd/Q=');
+
         $migration = include __DIR__.'/../database/migrations/create_leads_table.php.stub';
         $migration->up();
     }

@@ -17,6 +17,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Homeful\KwYCCheck\KwYCCheck;
 use Zxing\QrReader;
 use SVG\SVG;
+use Homeful\KwYCCheck\Events\LeadContactCreated;
+use Homeful\KwYCCheck\Actions\CreateLeadContactAction;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -202,4 +204,22 @@ test('lead has auto-populated media attributes', function() {
             expect($lead->getAttribute($upload['name']))->toBeInstanceOf(Media::class);
         }
     }
+});
+
+test('create lead contact action', function () {
+    Event::fake(LeadContactCreated::class);
+    $lead = Lead::factory()->create();
+    $attribs = Contact::factory()->definition();
+    with(app(CreateLeadContactAction::class)->run($lead, $attribs), function (Lead $lead) {
+        expect($lead->contact)->toBeInstanceOf(Contact::class);
+    });
+    Event::assertDispatched(LeadContactCreated::class);
+});
+
+test('create lead contact end point', function() {
+    $lead = Lead::factory()->create();
+    $attribs = Contact::factory()->definition();
+    $booking_server_response = $this->postJson(route('create-lead-contact', ['lead' => $lead->getAttribute('id')]), $attribs);
+    $booking_server_response->assertStatus(302);
+//    $this->followRedirects($booking_server_response)->assertSee('lead-contact.created');
 });

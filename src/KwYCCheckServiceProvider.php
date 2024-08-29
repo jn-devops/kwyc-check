@@ -20,6 +20,7 @@ class KwYCCheckServiceProvider extends PackageServiceProvider
             ->hasConfigFile(['data', 'kwyc-check', 'media-library'])
             ->hasViews()
             ->hasRoute('api')
+            ->hasRoute('web')
             ->hasMigration('create_leads_table')
         ;
     }
