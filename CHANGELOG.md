@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.2 - 2024-08-29
+
+refactor generateURL
+
 ## #v1.4.1 - 2024-08-26
 
 auto-populate media attributes upon creation
