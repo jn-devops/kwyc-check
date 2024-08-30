@@ -1,24 +1,21 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Illuminate\Foundation\Testing\{RefreshDatabase, WithFaker};
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Homeful\KwYCCheck\Actions\CreateLeadContactAction;
 use Homeful\KwYCCheck\Events\CampaignQRCodeGenerated;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
+use Homeful\KwYCCheck\Actions\AttachLeadMediaAction;
+use Homeful\KwYCCheck\Events\LeadContactCreated;
 use Homeful\KwYCCheck\Actions\ProcessLeadAction;
 use Homeful\KwYCCheck\Events\LeadProcessed;
 use Homeful\Contacts\Data\ContactData;
 use Illuminate\Support\Facades\Event;
 use Homeful\Contacts\Models\Contact;
 use Homeful\KwYCCheck\Data\LeadData;
-use Homeful\KwYCCheck\Facades\KYC;
 use Homeful\KwYCCheck\Models\Lead;
-use Homeful\KwYCCheck\Actions\AttachLeadMediaAction;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Homeful\KwYCCheck\KwYCCheck;
-use Zxing\QrReader;
-use SVG\SVG;
-use Homeful\KwYCCheck\Events\LeadContactCreated;
-use Homeful\KwYCCheck\Actions\CreateLeadContactAction;
+use Illuminate\Support\Arr;
 
 uses(RefreshDatabase::class, WithFaker::class);
 
@@ -67,6 +64,7 @@ test('lead has attributes', function () {
         expect($lead->id_number)->toBeString();
         expect($lead->id_image_url)->toBeString();
         expect($lead->selfie_image_url)->toBeString();
+        expect($lead->document_url)->toBeString();
 //        expect($lead->id_mark_url)->toBeString();
         expect($lead->meta)->toBeInstanceOf(SchemalessAttributes::class);
         expect($lead->checkin)->toBeArray();

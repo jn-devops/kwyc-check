@@ -9,15 +9,15 @@ use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Homeful\KwYCCheck\Traits\HasMediaAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Homeful\Contacts\Models\Contact;
-use Spatie\MediaLibrary\{HasMedia,
-    InteractsWithMedia,
-    MediaCollections\File,
-    MediaCollections\Models\Media};
 use Homeful\Common\Traits\HasMeta;
+use Spatie\MediaLibrary\{HasMedia,
+    MediaCollections\Models\Media,
+    MediaCollections\File,
+    InteractsWithMedia};
 use Spatie\Image\Enums\Fit;
 
 /**
- * Class Contract
+ * Class Lead
  *
  * @property int $id
  * @property Contact $contact
@@ -54,11 +54,18 @@ class Lead extends Model implements HasMedia
     use HasFactory;
     use HasMeta;
 
+    /**
+     * @return BelongsTo
+     */
     public function contact(): BelongsTo
     {
         return $this->belongsTo(Contact::class);
     }
 
+    /**
+     * @param Contact $contact
+     * @return $this
+     */
     public function setContactAttribute(Contact $contact): self
     {
         $this->contact()->associate($contact);
@@ -67,6 +74,9 @@ class Lead extends Model implements HasMedia
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function registerMediaCollections(): void
     {
         $collections = [
@@ -86,6 +96,10 @@ class Lead extends Model implements HasMedia
         }
     }
 
+    /**
+     * @param Media|null $media
+     * @return void
+     */
     public function registerMediaConversions(?Media $media = null): void
     {
         $this
