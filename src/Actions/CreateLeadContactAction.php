@@ -21,7 +21,6 @@ class CreateLeadContactAction
         $contact = PersistContactAction::run($attribs);
         $lead->contact()->associate($contact);
         $lead->save();
-        $lead->load('contact');
         LeadContactCreated::dispatch($lead);
 
         return $lead;
