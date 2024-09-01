@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.6 - 2024-09-01
+
+use create contact action instead of persist contact action
+
 ## #v1.4.5 - 2024-08-31
 
 fix create lead contact action
