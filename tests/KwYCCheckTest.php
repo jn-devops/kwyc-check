@@ -216,8 +216,14 @@ test('create lead contact action', function () {
 
 test('create lead contact end point', function() {
     $lead = Lead::factory()->create();
+    if ($lead instanceof Lead) expect($lead->contact)->toBeNull();
     $attribs = Contact::factory()->definition();
     $booking_server_response = $this->postJson(route('create-lead-contact', ['lead' => $lead->getAttribute('id')]), $attribs);
     $booking_server_response->assertStatus(302);
+    $lead = Lead::find($lead->id);
+    if ($lead instanceof Lead) {
+        expect($lead)->toBeInstanceOf(Lead::class);
+        expect($lead->contact)->toBeInstanceOf(Contact::class);
+    }
 //    $this->followRedirects($booking_server_response)->assertSee('lead-contact.created');
 });
