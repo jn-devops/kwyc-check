@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.8 - 2024-09-09
+
+add UploadedFile capability to campaignDocument
+
 ## #v1.4.7 - 2024-09-09
 
 change id from int to uuid, add campaignDocumentUrl
