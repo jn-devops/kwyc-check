@@ -6,6 +6,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait HasMediaAttributes
@@ -67,19 +68,20 @@ trait HasMediaAttributes
     }
 
 
-    public function setCampaignDocumentAttribute(?string $url): static
+    public function setCampaignDocumentAttribute(string|\Symfony\Component\HttpFoundation\File\UploadedFile $file = null): static
     {
-//        $file = file_exists($file) ? $file : Storage::path($file);
-//
-//        $this->addMedia(file: $file)
-//            ->toMediaCollection('campaign-documents');
-
-//        $file = file_exists($file) ? $file : Storage::path($file);
-
-        if ($url) {
-            $this->addMediaFromUrl(url: $url)
-                ->usingName('campaignDocument')
-                ->toMediaCollection('campaign-documents');
+        if ($file) {
+            if (filter_var($file, FILTER_VALIDATE_URL)) {
+                $this->addMediaFromUrl(url: $file)
+                    ->usingName('campaignDocument')
+                    ->toMediaCollection('campaign-documents');
+            }
+            else {
+                $file = file_exists($file) ? $file : Storage::path($file);
+                $this->addMedia(file: $file)
+                    ->usingName('campaignDocument')
+                    ->toMediaCollection('campaign-documents');
+            }
         }
 
         return $this;
