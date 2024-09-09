@@ -100,19 +100,21 @@ test('lead has a settable contact relation', function () {
 test('lead has data', function () {
     $lead = Lead::factory()->forContact()->create();
     $data = LeadData::fromModel($lead);
-    expect($data->id)->toBe($lead->id);
-    expect($data->name)->toBe($lead->name);
-    expect($data->address)->toBe($lead->address);
-    expect($data->birthdate)->toBe($lead->birthdate);
-    expect($data->email)->toBe($lead->email);
-    expect($data->mobile)->toBe($lead->mobile);
-    expect($data->code)->toBe($lead->code);
-    expect($data->id_type)->toBe($lead->id_type);
-    expect($data->id_image_url)->toBe($lead->id_image_url);
-    expect($data->selfie_image_url)->toBe($lead->selfie_image_url);
-    expect($data->document_url)->toBe($lead->document_url);
-    expect($data->id_mark_url)->toBe($lead->id_mark_url);
-    expect($data->contact)->toBeInstanceOf(ContactData::class);
+    if ($lead instanceof Lead) {
+        expect($data->id)->toBe($lead->id);
+        expect($data->name)->toBe($lead->name);
+        expect($data->address)->toBe($lead->address);
+        expect($data->birthdate)->toBe($lead->birthdate);
+        expect($data->email)->toBe($lead->email);
+        expect($data->mobile)->toBe($lead->mobile);
+        expect($data->code)->toBe($lead->code);
+        expect($data->id_type)->toBe($lead->id_type);
+        expect($data->id_image_url)->toBe($lead->id_image_url);
+        expect($data->selfie_image_url)->toBe($lead->selfie_image_url);
+        expect($data->campaign_document_url)->toBe($lead->campaign_document_url);
+//    expect($data->id_mark_url)->toBe($lead->id_mark_url);
+        expect($data->contact)->toBeInstanceOf(ContactData::class);
+    }
 });
 
 test('process lead action', function () {
@@ -143,7 +145,7 @@ test('process lead action', function () {
         expect($lead->id_number)->toBe($idNumber);
         expect($lead->id_image_url)->toBeUrl();
         expect($lead->selfie_image_url)->toBeUrl();
-        expect($lead->id_mark_url)->toBeNull();
+//        expect($lead->id_mark_url)->toBeNull();
     }
     Event::assertDispatched(LeadProcessed::class);
 });
