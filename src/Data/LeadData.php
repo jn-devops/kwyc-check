@@ -10,6 +10,7 @@ use Spatie\LaravelData\Data;
 class LeadData extends Data
 {
     public function __construct(
+        public string $id,
         public string $name,
         public string $address,
         public string $birthdate,
@@ -22,6 +23,7 @@ class LeadData extends Data
         public string $id_number,
         public ?string $id_image_url,
         public ?string $selfie_image_url,
+        public ?string $document_url,
         public ?string $id_mark_url,
         public ?ContactData $contact,
     ) {}
@@ -29,6 +31,7 @@ class LeadData extends Data
     public static function fromModel(Lead $lead): self
     {
         return new self (
+            id: $lead->id,
             name: $lead->name,
             address: $lead->address,
             birthdate: $lead->birthdate,
@@ -41,6 +44,7 @@ class LeadData extends Data
             id_number: $lead->id_number,
             id_image_url: $lead->id_image_url,
             selfie_image_url: $lead->selfie_image_url,
+            document_url: $lead->document_url,
             id_mark_url: $lead->id_mark_url,
             contact: null == $lead->contact ? null : ContactData::fromModel($lead->contact)
         );

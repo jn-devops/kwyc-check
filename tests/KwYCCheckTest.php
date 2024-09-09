@@ -64,10 +64,18 @@ test('lead has attributes', function () {
         expect($lead->id_number)->toBeString();
         expect($lead->id_image_url)->toBeString();
         expect($lead->selfie_image_url)->toBeString();
-        expect($lead->document_url)->toBeString();
+        expect($lead->campaign_document_url)->toBeString();
 //        expect($lead->id_mark_url)->toBeString();
         expect($lead->meta)->toBeInstanceOf(SchemalessAttributes::class);
         expect($lead->checkin)->toBeArray();
+    }
+});
+
+test('lead checkin code is lead id', function () {
+    $lead = Lead::factory()->create();
+    if ($lead instanceof Lead) {
+        expect($lead->id)->toBeUuid();
+        expect($lead->id)->toBe($lead->checkin_code);
     }
 });
 
@@ -92,6 +100,7 @@ test('lead has a settable contact relation', function () {
 test('lead has data', function () {
     $lead = Lead::factory()->forContact()->create();
     $data = LeadData::fromModel($lead);
+    expect($data->id)->toBe($lead->id);
     expect($data->name)->toBe($lead->name);
     expect($data->address)->toBe($lead->address);
     expect($data->birthdate)->toBe($lead->birthdate);
@@ -101,6 +110,7 @@ test('lead has data', function () {
     expect($data->id_type)->toBe($lead->id_type);
     expect($data->id_image_url)->toBe($lead->id_image_url);
     expect($data->selfie_image_url)->toBe($lead->selfie_image_url);
+    expect($data->document_url)->toBe($lead->document_url);
     expect($data->id_mark_url)->toBe($lead->id_mark_url);
     expect($data->contact)->toBeInstanceOf(ContactData::class);
 });
@@ -154,29 +164,32 @@ dataset('media-attribs', function () {
        [
            fn() => [
                'idImage' => 'https://jn-img.enclaves.ph/Test/idImage.jpg',
-               'selfieImage' => 'https://jn-img.enclaves.ph/Test/selfieImage.jpg'
+               'selfieImage' => 'https://jn-img.enclaves.ph/Test/selfieImage.jpg',
+               'campaignDocument' => 'https://jn-img.enclaves.ph/Test/TEST%20DOCUMENT.pdf'
            ]
        ]
    ];
 });
 
 test('lead has settable media ', function(array $attribs) {
-    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
+    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null, 'campaignDocument' => null]);//['idImage' => null, 'selfieImage' => null, 'campaignDocument' => null]
     if ($lead instanceof Lead) {
         $lead->update($attribs);
         $lead->save();
         expect($lead->idImage)->toBeInstanceOf(Media::class);
         expect($lead->selfieImage)->toBeInstanceOf(Media::class);
+        expect($lead->campaignDocument)->toBeInstanceOf(Media::class);
     }
 })->with('media-attribs');
 
 test('attach lead media action ', function(array $attribs) {
-    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null]);
+    $lead = Lead::factory()->create(['idImage' => null, 'selfieImage' => null, 'campaignDocument' => null]);
     if ($lead instanceof Lead) {
         $lead = app(AttachLeadMediaAction::class)->run($lead, $attribs);
         if ($lead instanceof Lead) {
             expect($lead->idImage)->toBeInstanceOf(Media::class);
             expect($lead->selfieImage)->toBeInstanceOf(Media::class);
+            expect($lead->campaignDocument)->toBeInstanceOf(Media::class);
         }
     }
 })->with('media-attribs');
@@ -189,7 +202,8 @@ test('attach lead media has api end point ', function(array $attribs) {
         $lead->refresh();
         expect($lead->idImage)->toBeInstanceOf(Media::class);
         expect($lead->selfieImage)->toBeInstanceOf(Media::class);
-        expect($lead->uploads)->toHaveCount(2);
+        expect($lead->campaignDocument)->toBeInstanceOf(Media::class);
+        expect($lead->uploads)->toHaveCount(3);
         //improve test
     }
 })->with('media-attribs');
@@ -197,7 +211,7 @@ test('attach lead media has api end point ', function(array $attribs) {
 test('lead has auto-populated media attributes', function() {
     $lead = Lead::factory()->create();
     if ($lead instanceof Lead) {
-        expect($lead->uploads)->toHaveCount(2);
+        expect($lead->uploads)->toHaveCount(3);
         foreach($lead->uploads as $upload) {
             expect($lead->getAttribute($upload['name']))->toBeInstanceOf(Media::class);
         }

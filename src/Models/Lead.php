@@ -2,7 +2,7 @@
 
 namespace Homeful\KwYCCheck\Models;
 
-use Homeful\KwYCCheck\Traits\{HasCheckinExtractedFieldsAttributes, HasCheckinInputFieldsAttributes, HasMetaAttributes};
+use Homeful\KwYCCheck\Traits\{HasCheckinFieldsAttributes, HasCheckinExtractedFieldsAttributes, HasCheckinInputFieldsAttributes, HasMetaAttributes};
 use Homeful\Common\Traits\HasPackageFactory as HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
@@ -19,7 +19,8 @@ use Spatie\Image\Enums\Fit;
 /**
  * Class Lead
  *
- * @property int $id
+ * @property string $id
+ * @property string $checkin_code
  * @property Contact $contact
  * @property string $name
  * @property string $address
@@ -33,26 +34,41 @@ use Spatie\Image\Enums\Fit;
  * @property string $id_number
  * @property string $id_image_url
  * @property string $selfie_image_url
- * @property string $id_mark_url
+ * @property string $campaign_document_url
  * @property SchemalessAttributes $meta
  * @property array $checkin
  * @property array $media
  * @property Media $idImage
  * @property Media $selfieImage
+ * @property Media $campaignDocument
  * @property array $uploads
  *
  * @method Model create()
  * @method int getKey()
+ *
+ * @note https://dev.to/adnanbabakan/implement-uuid-primary-key-in-laravel-and-its-benefits-55o3
  */
 class Lead extends Model implements HasMedia
 {
     use HasCheckinExtractedFieldsAttributes;
     use HasCheckinInputFieldsAttributes;
+    use HasCheckinFieldsAttributes;
     use HasMediaAttributes;
     use InteractsWithMedia;
     use HasMetaAttributes;
     use HasFactory;
     use HasMeta;
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+    public static function booted(): void
+    {
+        static::creating(function (Lead $lead) {
+            $lead->id = $lead->checkin_code;
+        });
+    }
 
     /**
      * @return BelongsTo
@@ -82,6 +98,7 @@ class Lead extends Model implements HasMedia
         $collections = [
             'id-images' => ['image/jpeg', 'image/png', 'image/webp'],
             'selfie-images' => ['image/jpeg', 'image/png', 'image/webp'],
+            'campaign-documents' => ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
         ];
 
         foreach ($collections as $collection => $mimeTypes) {

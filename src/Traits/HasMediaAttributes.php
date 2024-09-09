@@ -6,13 +6,14 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 trait HasMediaAttributes
 {
     public function initializeHasMediaAttributes(): void
     {
-        $this->mergeFillable(['idImage', 'selfieImage']);
+        $this->mergeFillable(['idImage', 'selfieImage', 'campaignDocument']);
     }
 
     public function getIdImageAttribute(): ?Media
@@ -56,6 +57,30 @@ trait HasMediaAttributes
             $this->addMediaFromUrl($url)
                 ->usingName('selfieImage')
                 ->toMediaCollection('selfie-images');
+        }
+
+        return $this;
+    }
+
+    public function getCampaignDocumentAttribute(): ?Media
+    {
+        return $this->getFirstMedia('campaign-documents');
+    }
+
+
+    public function setCampaignDocumentAttribute(?string $url): static
+    {
+//        $file = file_exists($file) ? $file : Storage::path($file);
+//
+//        $this->addMedia(file: $file)
+//            ->toMediaCollection('campaign-documents');
+
+//        $file = file_exists($file) ? $file : Storage::path($file);
+
+        if ($url) {
+            $this->addMediaFromUrl(url: $url)
+                ->usingName('campaignDocument')
+                ->toMediaCollection('campaign-documents');
         }
 
         return $this;

@@ -14,7 +14,7 @@ trait HasCheckinExtractedFieldsAttributes
     const ID_NUMBER_NDX = 'body.data.fieldsExtracted.idNumber';
     const ID_IMAGE_URL_NDX = 'body.data.idImageUrl';
     const SELFIE_IMAGE_URL_NDX = 'body.data.selfieImageUrl';
-    const DOCUMENT_URL_NDX = 'body.documentUrl';
+    const CAMPAIGN_DOCUMENT_URL_NDX = 'body.campaignDocumentUrl';
 
     public function getNameAttribute(): ?string
     {
@@ -51,8 +51,8 @@ trait HasCheckinExtractedFieldsAttributes
         return Arr::get($this->checkin, Lead::SELFIE_IMAGE_URL_NDX);
     }
 
-    public function getDocumentUrlAttribute(): ?string
+    public function getCampaignDocumentUrlAttribute(): ?string
     {
-        return Arr::get($this->checkin, Lead::DOCUMENT_URL_NDX);
+        return Arr::get($this->checkin, Lead::CAMPAIGN_DOCUMENT_URL_NDX);
     }
 }
