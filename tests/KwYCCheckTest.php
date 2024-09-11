@@ -220,6 +220,20 @@ test('lead has auto-populated media attributes', function() {
     }
 });
 
+test('lead has contact', function() {
+    $lead = Lead::factory()->create();
+    $contact = Contact::factory()->create();
+    if ($lead instanceof Lead) {
+        if ($contact instanceof Contact) {
+            expect($contact->id)->toBeUuid();
+            $lead->contact()->associate($contact);
+            $lead->save();
+            expect($lead->contact->id)->toBeUuid();
+            expect($lead->contact->is($contact));
+        }
+    }
+});
+
 test('create lead contact action', function () {
     Event::fake(LeadContactCreated::class);
     $lead = Lead::factory()->create();
