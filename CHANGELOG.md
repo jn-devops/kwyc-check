@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.4.9 - 2024-09-11
+
+update leads table to accommodate contact uuid id
+
 ## #v1.4.8 - 2024-09-09
 
 add UploadedFile capability to campaignDocument
