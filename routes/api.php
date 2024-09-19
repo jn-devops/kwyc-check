@@ -22,26 +22,22 @@ Route::post('generate-qr', GenerateQRCodeController::class)
     ->middleware('api')
     ->name('generate-qr');
 
-    Route::post('validate/id',  [HypervergeController::class, 'validate_id'])
+Route::post('validate/id',  [HypervergeController::class, 'validate_id'])
     ->prefix('api')
     ->middleware('api')
     ->name('id validation');
-    Route::post('check/liveliness',  [HypervergeController::class, 'validate_live_url'])
+Route::post('check/liveliness',  [HypervergeController::class, 'validate_live_url'])
     ->prefix('api')
     ->middleware('api')
-    ->name('liveliness validation');
-    Route::post('check/liveliness/base64',  [HypervergeController::class, 'validate_live_base64'])
+    ->name('liveliness check');
+Route::post('check/liveliness/base64',  [HypervergeController::class, 'validate_live_base64'])
     ->prefix('api')
     ->middleware('api')
-    ->name('liveliness validation');
-    Route::post('check/facematch',  [HypervergeController::class, 'face_match'])
+    ->name('liveliness check');
+Route::post('check/faceverify',  [HypervergeController::class, 'face_verify'])
     ->prefix('api')
     ->middleware('api')
-    ->name('face match validation');
-    Route::post('check/facematch/base64',  [HypervergeController::class, 'face_match_base64'])
-    ->prefix('api')
-    ->middleware('api')
-    ->name('face match validation');
+    ->name('face verification');
 
 
 

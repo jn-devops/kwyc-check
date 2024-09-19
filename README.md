@@ -35,11 +35,18 @@ return [
     'campaign_url' => env('CAMPAIGN_URL', 'https://kwyc-check.net/campaign-checkin/9ccef822-4209-4e0a-bb40-232da5cafdf1')
 ];
 ```
+```ENV Setup```
+    'HYPERVERGE_APP_BASEURL' = ""
+    'HYPERVERGE_APP_ID' = ""
+    'HYPERVERGE_APP_KEY' = ""
+    'HYPERVERGE_DEFAULT_FILESTORE' = ""
+```ENV Setup```
 
 There are api end points.
 - the payload for process-lead is webhook post from kwyc-check via pipedream
 - the payload for attach-media is an array of urls point to images
 - the payload for generate-qr is an array of inputs with default values
+
 ```php
 Route::post('process-lead', ProcessLeadController::class)
     ->prefix('api')
@@ -50,11 +57,34 @@ Route::post('attach-media/{lead}', AttachLeadMediaController::class)
     ->prefix('api')
     ->middleware('api')
     ->name('attach-media');
-
 Route::post('generate-qr', GenerateQRCodeController::class)
     ->prefix('api')
     ->middleware('api')
     ->name('generate-qr');
+Route::post('validate/id',  [HypervergeController::class, 'validate_id'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('id validation');
+Route::post('validate/id/base64',  [HypervergeController::class, 'validate_id'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('id validation');
+Route::post('check/liveliness',  [HypervergeController::class, 'validate_live_url'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('liveliness validation');
+Route::post('check/liveliness/base64',  [HypervergeController::class, 'validate_live_base64'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('liveliness validation');
+Route::post('check/faceverify',  [HypervergeController::class, 'face_verify'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('face match verification');
+Route::post('check/faceverify/base64',  [HypervergeController::class, 'face_verify_base64'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('face match verification');    
 ```
 
 To get the data from lead
@@ -82,6 +112,42 @@ $svg = KYC::generateCampaignQRCOde(query_params: ['code' => 'ABC-123','identifie
 
 echo $svg; 
 //qr code points to https://kwyc-check.net/campaign-checkin/9ccef822-4209-4e0a-bb40-232da5cafdf1?code=ABC-111&identifier=DEF-222&choice=GHI-333
+
+```validate/id```
+    $jsonInput =[{
+        "imageURL" : "", //should be inside storage folder -- ex. app/public
+        "referenceCode":"", //alpha-numeric
+        "countryId":"",//country code check documentation link for list https://documentation.hyperverge.co/OCR_country_docs_list
+        "documentId":""//id type check documentation link for list https://documentation.hyperverge.co/OCR_country_docs_list
+    }];
+    ```or```
+    $jsonInput =[{
+        "base64Img" : "", //base64 image
+        "referenceCode":"", //alpha-numeric
+        "countryId":"",//country code check documentation link for list https://documentation.hyperverge.co/OCR_country_docs_list
+        "documentId":""//id type check documentation link for list https://documentation.hyperverge.co/OCR_country_docs_list
+    }];
+```check/liveliness```
+    $jsonInput =[{
+        "imageURL":"",//should be inside storage folder -- ex. app/public
+        "referenceCode":"",//alpha-numeric
+        }];
+
+```check/faceverify```
+    $jsonInput =[{
+        "imageURL":"",//should be inside storage folder -- ex. app/public
+        "referenceCode":"",//alpha-numeric
+        "imagePath":"",//path inside storage -- ex. app/public
+        "type":"" //selfie or id
+        }];
+    ```or```    
+    $jsonInput =[{
+        "base64Img":"",//base64 image
+        "referenceCode":"",//alpha-numeric
+        "imagePath":"",//path inside storage -- ex. app/public
+        "type":"" //selfie or id
+    }];
+
 ```
 
 ## Testing

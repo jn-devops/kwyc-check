@@ -30,7 +30,7 @@ class HypervergeController extends Controller
     public function validate_live_url(Request $request){
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/checkLiveness";
-       
+
         if (!file_exists($request->imageURL)) {   
         return "File not found.";
         } 
@@ -50,8 +50,9 @@ class HypervergeController extends Controller
             return $resJSON->result->summary;
         }
      catch (\Exception $e) {
-        return ['action' => 'Image is unprocessable',
-                'details' =>  $e->getMessage()];
+        $err = ['action' => 'Image is unprocessable',
+        'details' =>  $e->getMessage()];
+        return json_decode(json_encode($err)) ;
         } 
     }
     public function validate_live_base64(Request $request){
@@ -62,7 +63,7 @@ class HypervergeController extends Controller
         $base64Img = substr($request->base64img, strpos($request->base64img, ',') + 1);
         $base64Img = base64_decode($request->base64img);
         Storage::put('public/image/' .  $request->referenceCode.".JPEG", $base64Img);
-        
+       
         $client = new Client();
         $response = $client->post($requestURL, [
             'multipart' => [
@@ -75,25 +76,32 @@ class HypervergeController extends Controller
         ]);
         $responseBody = $response->getBody()->getContents();
         Storage::delete('public/image/' .$request->referenceCode.".JPEG");
-        // dd($responseBody);
         return $responseBody;
     }
     public function validate_id(Request $request){
-     
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/readId";
-        
-                if (file_exists($request->imageURL)) {
-                return "File not found.";
-                } 
-        // if (file_exists(storage_path('image/' . $request->referenceCode.".JPG"))) {
-        //     $imageURL =  storage_path('image/'.$request->referenceCode.".JPG");
-        // }
-        // else{
-        //     return "File not found.";
-        // }
+    
+        if($request->imageURL){
+        if (file_exists(storage_path($request->imageURL))) {
+            $imageURL = storage_path($request->imageURL);
+        }
+            else{ return "File not found."; } 
+        }
+        elseif($request->base64Img){
+            $base64Img = substr($request->base64Img, strpos($request->base64Img, ',') + 1);
+            $base64Img = base64_decode($request->base64Img);
+            Storage::put('public/image/' .  $request->referenceCode.".JPEG", $base64Img);
+            if (file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))) {
+                $imageURL = Storage::path('public/image/'.$request->referenceCode.".JPEG");
+            }
+            else{ return "File not found."; } 
+        }
+        else{
+            return "Invalid request format";
+        }
         $client = new Client();
-        // dd($request->documentId);
+
         $response = $client->post($requestURL, [
             'multipart' => [
                 [
@@ -112,7 +120,9 @@ class HypervergeController extends Controller
             'headers' => $headers
         ]);
         $responseBody = $response->getBody()->getContents();
-
+        if(file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))){
+           Storage::delete('public/image/' .$request->referenceCode.".JPEG"); 
+        }
         return $responseBody;
     }
     public function face_match(Request $request){
@@ -150,38 +160,47 @@ class HypervergeController extends Controller
             'contents' => $request->type
         ];
          }
-        // dd($body);
+
         $client = new Client();
-        // dd($requestURL )
-        // dd($request->documentId);
         $response = $client->post($requestURL, [
                 'multipart' => $body,
                 'headers' => $headers
             ]);
             
             $responseBody = $response->getBody()->getContents();
-            
-            // $responseBody = $response->getMessage();
-            // dd($responseBody);
-            // dd(json_decode( $response->getBody()->getContents()));
             return $responseBody;
        
     }
-    public function face_match_base64(Request $request){
-        dd(config('kwyc-check.credential.base_url'));
+    public function face_verify(Request $request){
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/matchFace";
-
-        $base64Img = substr($request->base64img, strpos($request->base64img, ',') + 1);
-        $base64Img = base64_decode($request->base64img);
-
-        Storage::put('public/image/' .  $request->referenceCode.'.JPEG', $base64Img);
-        $request->merge(['imageURL' => Storage::path('public/image/'.$request->referenceCode.".JPEG")]);
+        //simplify
+        if($request->imageURL){
+            if (file_exists(storage_path($request->imageURL))) 
+            {
+                $imageURL = storage_path($request->imageURL);
+                $request->merge(['imageURL' => storage_path($request->imageURL)]);
+            }
+                else{ return "File not found."; } 
+            }
+        elseif($request->base64Img)
+            {   
+                $base64Img = substr($request->base64Img, strpos($request->base64Img, ',') + 1);
+                $base64Img = base64_decode($request->base64Img);
+                Storage::put('public/image/' .  $request->referenceCode.".JPEG", $base64Img);
+                $request->merge(['imageURL' => Storage::path('public/image/'.$request->referenceCode.".JPEG")]);
+                if (file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))) {
+                    $imageURL = Storage::path('public/image/'.$request->referenceCode.".JPEG");
+                }
+                else{ return "File not found."; } 
+                }
+            else{
+                return "Invalid request format";
+        }
         //check liveliness
         try{
             $live_response = $this->validate_live_url($request);
             if($live_response->action != 'pass'){
-                // return  $live_response->action;
                 return ["Message" =>"Failed face check.",
                 "Summary" => $live_response->details];
             }  
@@ -194,13 +213,13 @@ class HypervergeController extends Controller
         $client = new Client();
         $filepath = $request->imagePath ? $request->imagePath :$this->default_filestore();
 
-        if (file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))) {
-            // $image2URL =  storage_path($filepath.'/'.$request->referenceCode.".JPG");
-            $image1URL =  Storage::path('public/image/'.$request->referenceCode.".JPEG");          
-        }
-        else{
-            return ["Message" =>"File not found."];
-        }
+        // if (file_exists($request->imageURL)) {
+        //     $image1URL =  $request->imageURL;          
+        // }
+        // else{
+        //     return ["Message" =>"File not found."];
+        // }
+
         if (file_exists(storage_path($filepath.'/' . $request->referenceCode.".JPG"))) {
             $image2URL =  storage_path($filepath.'/'.$request->referenceCode.".JPG");  
         }
@@ -211,7 +230,7 @@ class HypervergeController extends Controller
         $body =[ 
             [
             'name' => 'image1',
-            'contents' =>fopen($image1URL, 'r')
+            'contents' =>fopen($imageURL, 'r')
             ],
             [
             'name' => 'image2',
@@ -232,9 +251,12 @@ class HypervergeController extends Controller
                 'headers' => $headers
             ]);
             
-            $responseBody = $response->getBody()->getContents();
-            Storage::delete('public/image/' .$request->referenceCode.".JPEG");//delete create image
-            return $responseBody;
+        $responseBody = $response->getBody()->getContents();
+        if(file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))){
+            Storage::delete('public/image/' .$request->referenceCode.".JPEG"); //delete create image
+        }
+        // Storage::delete('public/image/' .$request->referenceCode.".JPEG");
+        return $responseBody;
        
     }
 
