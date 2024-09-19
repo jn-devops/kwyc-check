@@ -17,7 +17,7 @@ class KwYCCheckServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('kwyc-check')
-            ->hasConfigFile(['data', 'kwyc-check', 'media-library'])
+            ->hasConfigFile(['data', 'media-library', 'kwyc-check'])
             ->hasViews()
             ->hasRoute('api')
             ->hasRoute('web')
