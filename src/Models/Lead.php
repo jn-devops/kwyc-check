@@ -30,6 +30,7 @@ use Spatie\Image\Enums\Fit;
  * @property string $code
  * @property string $identifier
  * @property string $choice
+ * @property string $location
  * @property string $id_type
  * @property string $id_number
  * @property string $id_image_url

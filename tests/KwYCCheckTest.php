@@ -124,12 +124,13 @@ test('process lead action', function () {
     $code = $this->faker()->word();
     $identifier = $this->faker()->word();
     $choice = $this->faker()->word();
+    $location = $this->faker->latitude() . $this->faker->longitude();
     $fullName = $this->faker()->name();
     $address = $this->faker()->city();
     $dateOfBirth = '1999-03-17';
     $idType = 'phl_dl';
     $idNumber = 'ID-123456';
-    $checkin_payload  = Lead::factory()->getCheckinPayload(compact(  'email', 'mobile', 'code', 'identifier', 'choice', 'fullName', 'address', 'dateOfBirth', 'idType', 'idNumber'));
+    $checkin_payload  = Lead::factory()->getCheckinPayload(compact(  'email', 'mobile', 'code', 'identifier', 'choice', 'location', 'fullName', 'address', 'dateOfBirth', 'idType', 'idNumber'));
     $action = app(ProcessLeadAction::class);
     $lead = $action->run($checkin_payload);
     if ($lead instanceof Lead) {
@@ -138,6 +139,7 @@ test('process lead action', function () {
         expect($lead->code)->toBe($code);
         expect($lead->identifier)->toBe($identifier);
         expect($lead->choice)->toBe($choice);
+        expect($lead->location)->toBe($location);
         expect($lead->name)->toBe($fullName);
         expect($lead->address)->toBe($address);
         expect($lead->birthdate)->toBe($dateOfBirth);

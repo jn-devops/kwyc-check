@@ -12,6 +12,7 @@ trait HasCheckinInputFieldsAttributes
     const CODE_NDX = 'body.inputs.code';
     const IDENTIFIER_NDX = 'body.inputs.identifier';
     const CHOICE_NDX = 'body.inputs.choice';
+    const LOCATION_NDX = 'body.inputs.location';
 
     public function getEmailAttribute(): ?string
     {
@@ -36,5 +37,10 @@ trait HasCheckinInputFieldsAttributes
     public function getChoiceAttribute(): ?string
     {
         return Arr::get($this->checkin, Lead::CHOICE_NDX);
+    }
+
+    public function getLocationAttribute(): ?string
+    {
+        return Arr::get($this->checkin, Lead::LOCATION_NDX);
     }
 }
