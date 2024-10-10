@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.5.0 - 2024-10-09
+
+add location, nullable inputs
+
 ## #v1.4.9 - 2024-09-11
 
 update leads table to accommodate contact uuid id
