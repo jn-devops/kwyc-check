@@ -259,3 +259,16 @@ test('create lead contact end point', function() {
     }
 //    $this->followRedirects($booking_server_response)->assertSee('lead-contact.created');
 });
+
+test('image urls are settable', function () {
+    $lead = Lead::factory()->create();
+    if ($lead instanceof Lead) {
+        expect($lead->id_image_url)->toBeString();
+        $lead->id_image_url = $url = $this->faker->url();
+        $lead->save();
+        expect($lead->id_image_url)->toBe($url);
+        $lead->selfie_image_url = $url = $this->faker->url();
+        $lead->save();
+        expect($lead->selfie_image_url)->toBe($url);
+    }
+});

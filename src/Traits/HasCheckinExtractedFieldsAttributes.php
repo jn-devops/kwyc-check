@@ -41,9 +41,23 @@ trait HasCheckinExtractedFieldsAttributes
         return Arr::get($this->checkin, Lead::ID_NUMBER_NDX);
     }
 
+    public function setIdImageUrlAttribute(string $url): self
+    {
+        $this->meta->set('checkin.body.data.idImageUrl', $url);
+
+        return $this;
+    }
+
     public function getIdImageUrlAttribute(): ?string
     {
         return Arr::get($this->checkin, Lead::ID_IMAGE_URL_NDX);
+    }
+
+    public function setSelfieImageUrlAttribute(string $url): self
+    {
+        $this->meta->set('checkin.body.data.selfieImageUrl', $url);
+
+        return $this;
     }
 
     public function getSelfieImageUrlAttribute(): ?string
