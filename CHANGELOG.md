@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.5.2 - 2024-10-10
+
+make address nullable
+
 ## #v1.5.1 - 2024-10-10
 
 settable image urls
