@@ -40,6 +40,8 @@ return [
     'HYPERVERGE_APP_ID' = ""
     'HYPERVERGE_APP_KEY' = ""
     'HYPERVERGE_DEFAULT_FILESTORE' = ""
+    'ENGAGESPARK_APIKEY' = ""
+    'ENGAGESPARK_ORG_ID' = ""
 ```ENV Setup```
 
 There are api end points.
@@ -85,6 +87,10 @@ Route::post('check/faceverify/base64',  [HypervergeController::class, 'face_veri
     ->prefix('api')
     ->middleware('api')
     ->name('face match verification');    
+Route::post('create/contact',  [EngageSparkController::class, 'formatContactBody'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('face verification');    
 ```
 
 To get the data from lead
@@ -107,6 +113,7 @@ php artisan vendor:publish --tag="kwyc-check-views"
 
 ```php
 use Homeful\KwYCCheck\Facades\KYC;
+
 
 $svg = KYC::generateCampaignQRCOde(query_params: ['code' => 'ABC-123','identifier'=>'DEF-456','choice'=>'GHI-789']);
 
@@ -148,8 +155,18 @@ echo $svg;
         "type":"" //selfie or id
     }];
 
-```
 
+```Engagespark```
+    use Homeful\KwYCCheck\Http\Controllers\EngageSparkController;
+    ```create contact```
+    $jsonInput = [{
+        "mobile": "", //number
+        "firstName": "", //alpha-numeric
+        "lastName": "",//alpha-numeric
+        "groupId": [] ////alpha-numeric array
+    }]
+    EngageSparkController::saveContact($jsonInput);
+```
 ## Testing
 
 ```bash

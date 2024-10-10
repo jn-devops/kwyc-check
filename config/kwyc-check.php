@@ -7,5 +7,9 @@ return [
         'appId' => env("HYPERVERGE_APP_ID"),
         'appKey' => env("HYPERVERGE_APP_KEY"),
         'defaultFileStorePath' => env("HYPERVERGE_DEFAULT_FILESTORE", 'image')
-    ]
+    ],
+    'engagespark' => [
+        'apiKey' => env("ENGAGESPARK_APIKEY", "e333ee0937f093dbacc77db00dd5b48a199c4cc8"),
+        'orgId' =>  env("ENGAGESPARK_ORG_ID","16089"),
+    ]  
 ];

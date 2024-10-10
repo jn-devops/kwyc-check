@@ -4,6 +4,7 @@ use Homeful\KwYCCheck\Http\Controllers\AttachLeadMediaController;
 use Homeful\KwYCCheck\Http\Controllers\GenerateQRCodeController;
 use Homeful\KwYCCheck\Http\Controllers\ProcessLeadController;
 use Homeful\KwYCCheck\Http\Controllers\HypervergeController;
+use Homeful\KwYCCheck\Http\Controllers\EngageSparkController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::post('check/faceverify',  [HypervergeController::class, 'face_verify'])
     ->middleware('api')
     ->name('face verification');
 
-
-
-
+Route::post('create/contact',  [EngageSparkController::class, 'formatContactBody'])
+    ->prefix('api')
+    ->middleware('api')
+    ->name('face verification');

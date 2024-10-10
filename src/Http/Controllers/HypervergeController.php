@@ -30,10 +30,14 @@ class HypervergeController extends Controller
     public function validate_live_url(Request $request){
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/checkLiveness";
-
+        // dd($request->imageURL);
         if (!file_exists($request->imageURL)) {   
-        return "File not found.";
+            return "File not found.";
         } 
+        // $filepath = $request->imagePath ? $request->imagePath :$this->default_filestore();
+        // if (file_exists(storage_path($filepath.'/' . $request->referenceCode.".JPG"))) {
+        //     $imageURL =  storage_path($filepath.'/'.$request->referenceCode.".JPG");  
+        // }
         try{
             $client = new Client();
             $response = $client->post($requestURL, [
@@ -59,7 +63,6 @@ class HypervergeController extends Controller
 
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/checkLiveness";
-       
         $base64Img = substr($request->base64img, strpos($request->base64img, ',') + 1);
         $base64Img = base64_decode($request->base64img);
         Storage::put('public/image/' .  $request->referenceCode.".JPEG", $base64Img);
@@ -174,14 +177,18 @@ class HypervergeController extends Controller
     public function face_verify(Request $request){
         $headers = $this->get_header($request->referenceCode);
         $requestURL = $this->base_url()."/matchFace";
-        //simplify
+
         if($request->imageURL){
+
             if (file_exists(storage_path($request->imageURL))) 
             {
                 $imageURL = storage_path($request->imageURL);
                 $request->merge(['imageURL' => storage_path($request->imageURL)]);
             }
-                else{ return "File not found."; } 
+            else
+            {
+                return ["Message" =>"File not found."];
+            } 
             }
         elseif($request->base64Img)
             {   
@@ -191,25 +198,34 @@ class HypervergeController extends Controller
                 $request->merge(['imageURL' => Storage::path('public/image/'.$request->referenceCode.".JPEG")]);
                 if (file_exists(Storage::path('public/image/'.$request->referenceCode.".JPEG"))) {
                     $imageURL = Storage::path('public/image/'.$request->referenceCode.".JPEG");
+                    $request->merge(['imageURL' => $imageURL]);
                 }
-                else{ return "File not found."; } 
+                else{ 
+                return ["Message" =>"File not found."];
+                 } 
                 }
             else{
-                return "Invalid request format";
+                return ["Message" =>"Invalid request format"];
         }
         //check liveliness
         try{
             $live_response = $this->validate_live_url($request);
-            if($live_response->action != 'pass'){
+            if(!$live_response->action){
+                if($live_response->action != 'pass'){
+                    return ["Message" =>"Failed face check.",
+                    "Summary" => $live_response->details];
+                }  
+            else{
                 return ["Message" =>"Failed face check.",
-                "Summary" => $live_response->details];
-            }  
+                "Summary" => $live_response]; 
+            }
+            }
         }
         catch(e)
         {
             return ["Message" =>"Error in live check."];
         }
-
+    
         $client = new Client();
         $filepath = $request->imagePath ? $request->imagePath :$this->default_filestore();
 
@@ -225,7 +241,7 @@ class HypervergeController extends Controller
         }
         else{
             Storage::delete('public/image/' .$request->referenceCode.".JPEG");//delete create image
-            return ["Message" =>"File not found."];
+            return ["Message" => "File not found."];
         }
         $body =[ 
             [
