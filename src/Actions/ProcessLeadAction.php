@@ -50,7 +50,7 @@ class ProcessLeadAction
             'body.data.idType' => ['required', 'string'],
             'body.data.fieldsExtracted' => ['required', 'array'],
             'body.data.fieldsExtracted.fullName' => ['required', 'string'],
-            'body.data.fieldsExtracted.address' => ['required', 'string'],
+            'body.data.fieldsExtracted.address' => ['nullable', 'string'],
             'body.data.fieldsExtracted.dateOfBirth' => ['required', 'date'],
             'body.data.fieldsExtracted.idNumber' => ['required', 'string'],
             'body.data.idImageUrl' => ['required', 'string'],
