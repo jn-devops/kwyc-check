@@ -7,6 +7,7 @@ use Homeful\Common\Traits\HasPackageFactory as HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\SchemalessAttributes\SchemalessAttributes;
 use Homeful\KwYCCheck\Traits\HasMediaAttributes;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Homeful\Contacts\Models\Contact;
 use Homeful\Common\Traits\HasMeta;
@@ -57,6 +58,7 @@ class Lead extends Model implements HasMedia
     use HasMediaAttributes;
     use InteractsWithMedia;
     use HasMetaAttributes;
+    use Notifiable;
     use HasFactory;
     use HasMeta;
 
@@ -89,6 +91,14 @@ class Lead extends Model implements HasMedia
         $this->load('contact');
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function routeNotificationForEngageSpark(): string
+    {
+        return $this->mobile;
     }
 
     /**
