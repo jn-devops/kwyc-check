@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.5.4 - 2024-10-12
+
+add checkin data
+
 ## #v1.5.3 - 2024-10-11
 
 make Lead notifiable
