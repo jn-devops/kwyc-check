@@ -9,6 +9,7 @@ use Homeful\KwYCCheck\Actions\AttachLeadMediaAction;
 use Homeful\KwYCCheck\Events\LeadContactCreated;
 use Homeful\KwYCCheck\Actions\ProcessLeadAction;
 use Homeful\KwYCCheck\Events\LeadProcessed;
+use Homeful\KwYCCheck\Data\CheckinData;
 use Homeful\Contacts\Data\ContactData;
 use Illuminate\Support\Facades\Event;
 use Homeful\Contacts\Models\Contact;
@@ -114,6 +115,7 @@ test('lead has data', function () {
         expect($data->campaign_document_url)->toBe($lead->campaign_document_url);
 //    expect($data->id_mark_url)->toBe($lead->id_mark_url);
         expect($data->contact)->toBeInstanceOf(ContactData::class);
+        expect($data->checkin)->toBeInstanceOf(CheckinData::class);
     }
 });
 

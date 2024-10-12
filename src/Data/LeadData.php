@@ -2,6 +2,7 @@
 
 namespace Homeful\KwYCCheck\Data;
 
+use Homeful\KwYCCheck\Data\CheckinData;
 use Homeful\Contacts\Data\ContactData;
 use Homeful\KwYCCheck\Models\Lead;
 use Spatie\LaravelData\Data;
@@ -25,6 +26,7 @@ class LeadData extends Data
         public ?string $selfie_image_url,
         public ?string $campaign_document_url,
         public ?ContactData $contact,
+        public ?CheckinData $checkin
     ) {}
 
     public static function fromModel(Lead $lead): self
@@ -45,7 +47,8 @@ class LeadData extends Data
             id_image_url: $lead->id_image_url,
             selfie_image_url: $lead->selfie_image_url,
             campaign_document_url: $lead->campaign_document_url,
-            contact: null == $lead->contact ? null : ContactData::fromModel($lead->contact)
+            contact: null == $lead->contact ? null : ContactData::fromModel($lead->contact),
+            checkin: CheckinData::fromObject($lead->checkin)
         );
     }
 }
