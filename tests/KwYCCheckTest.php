@@ -25,6 +25,8 @@ beforeEach(function () {
     $migration->up();
     $migration = include 'vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
     $migration->up();
+    $migration = include 'vendor/jn-devops/contacts/database/migrations/update_fields_and_then_add_some_in_contacts_table.php.stub';
+    $migration->up();
 });
 
 it('has configs', function () {
