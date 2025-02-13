@@ -2,6 +2,10 @@
 
 All notable changes to `kwyc-check` will be documented in this file.
 
+## #v1.5.6 - 2025-02-13
+
+update composer.json to allow jn-devops/contacts:^v2.0
+
 ## #v1.5.5 - 2025-02-09
 
 update jn-devops/contacts to version 2.0.0
